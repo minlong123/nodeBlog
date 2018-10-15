@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户组管理</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <style>
+        .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"]{
+            margin-left:0;position:static;
+        }
+        .check—group label{padding-left:0;}
+    </style>
+</head>
+<body>
+<% include header.ejs %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="/home" class="list-group-item">首页</a>
+                <a href="/userss" class="list-group-item">用户管理</a>
+                <a href="/usergroup" class="list-group-item active"><span class="badge"><%= pagesum%></span>用户组管理</a>
+                <a href="/company" class="list-group-item">机构管理</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">用户组管理面板</div>
+                <div class="panel-body">
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalss">添加用户组</a>
+
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>用户组名</th>
+                        <th>用户组描述</th>
+                        <th>用户组权限</th>
+                        <th>机构操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i=0;i<grouplist.length;i++){%>
+                        <tr>
+                            <th scope="row">
+                                <div class="checkbox checklist">
+                                    <label>
+                                        <input type="checkbox" value="<%= grouplist[i]['id']%>">
+                                    </label>
+                                </div>
+                            </th>
+
+                            <td><%= grouplist[i]['groupname']%></td>
+                            <td><%= grouplist[i]['grouppower']%></td>
+                            <td><%= grouplist[i]['grouptip']%></td>
+                            <td><a href="javascript:void(0)" onclick="updatagroup(<%= grouplist[i]['id']%>)"  class="btn btn-danger" data-toggle="modal">修改</a>&nbsp;&nbsp;<a href="javascript:void(0)" onclick="deletegroup(<%= grouplist[i]['id']%>)"  class="btn btn-danger" data-toggle="modal">删除</a></td>
+                        </tr>
+                        <% }%>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    全选&nbsp;&nbsp;<input type="checkbox" class="alldelete">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#" class="btn btn-danger delgroupss">删除</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <nav aria-label="Page navigation" style="text-align:center;">
+                            <ul class="pagination pagination-lg">
+
+                                <% if(pagenum==1){%>
+                                <li>
+                                    <a href="javascript:void(0)" aria-label="Previous" disabled="false">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <% }else{ %>
+                                <li>
+                                    <a href="/usergroup?page=<%= pagenum-1%>" aria-label="Previous" disabled="true">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <% }%>
+
+
+
+                                    <% for(var i=1;i<=Math.ceil(pagesum/5);i++){ %>
+
+
+                                        <% if(i==pagenum){%>
+
+                                        <li class="active"><a href="/usergroup?page=<%= i%>"><%= i%></a></li>
+
+                                        <% }else{%>
+
+                                         <li><a href="/usergroup?page=<%= i%>"><%= i%></a></li>
+                                        <% }%>
+                                    <% }%>
+
+
+
+                                <% if(pagenum==Math.ceil(pagesum/5)){%>
+                                <li>
+                                    <a href="javascript:void(0);" aria-label="Next" disabled="false">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <% }else{%>
+                                <li>
+                                    <a href="/usergroup?page=<%= parseInt(pagenum)+1%>" aria-label="Next" disabled="false">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <% }%>
+
+
+
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalss">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">用户组添加</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">组名称:</label>
+                        <input type="text" name="groupName" class="form-control" id="recipient-name">
+                    </div>
+
+                    <div class="checkbox check—group">
+                        <label>
+                            <label for="alla" class="control-label">用户组权限:</label>
+                            <input type="checkbox" id="alla">全选
+                        </label>
+                    </div>
+
+
+                    <div  class="container">
+                        <div class="row checkgroup">
+                            <div class="col-md-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox1" value="option1" title="1000"> 添加文章
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox2" value="option2" title="1001"> 删除文章
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox3" value="option3" title="1002"> 修改文章
+                                </label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox4" value="option4" title="1003"> 添加用户
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox5" value="option5" title="1004"> 删除用户
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="inlineCheckbox6" value="option6" title="1005"> 修改用户
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary submit-group">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalsss">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">用户组修改</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/updatagroups">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">组名称:</label>
+                        <input type="text" name="groupName" class="form-control" id="recipient-names">
+                        <input type="hidden" name="id" class="recipient-hidd">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">组描述:</label>
+                        <input type="text" name="grouptip" class="form-control" id="recipient-tip">
+                    </div>
+                    <div class="checkbox check—group">
+                        <label>
+                            <label for="allas" class="control-label">用户组权限:</label>
+                            <input type="checkbox" id="allas">全选
+                        </label>
+                    </div>
+
+
+                    <div  class="container">
+                        <div class="row checkgroups">
+                            <div class="col-md-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox1" value="1000" title="1000"> 添加文章
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox2" value="1001" title="1001"> 删除文章
+
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox3" value="1002" title="1002"> 修改文章
+                                </label>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox4" value="1003" title="1003"> 添加用户
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox5" value="1004" title="1004"> 删除用户
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="grouppo" id="inlineCheckbox6" value="1005" title="1005"> 修改用户
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="gridSystemModalss">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">重要提示</h4>
+            </div>
+            <div class="modal-body">
+                确认要删除吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary deltes">delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" tabindex="-1" id="gridSystemModalsss">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">重要警告</h4>
+            </div>
+            <div class="modal-body">
+                确认要删除数据吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancelall" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary deltesall">delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+    <script src="/javascripts/jquery-1.9.1.min.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
+    <script>
+        $(function(){
+
+            // 列表全选删除选择
+            $('.alldelete').click(function(){
+                if($(this).is(":checked")){
+                    $('.checklist label input').prop("checked",true);
+                }else{
+                    $('.checklist label input').prop("checked",false);
+                }
+            })
+            $('.delgroupss').click(function(){
+                var str=new Array();
+                $('.checklist label input').each(function(){
+                    if($(this).is(":checked")){
+                        str.push($(this).val());
+                    }
+                })
+                if(str.length!=0){
+                    $('#gridSystemModalsss').modal("show");
+                }else{
+                    alert("请选择至少一项删除");
+                }
+                str=JSON.stringify(str);
+                $('.deltesall').click(function(){
+                    $.post('/alldeleteg',{id:str},function(data,tip){
+                        if(tip=="success"){
+                            if(data[0]['count(*)']%5==0){
+                                location.href="/usergroup?page="+data[0]['count(*)']/5;
+                                if(data[0]['count(*)']/5==0){
+                                    location.href="/usergroup";
+                                }
+                            }else{
+                                window.history.go(0);
+                            }
+                        }
+                    })
+                })
+                $('.cancelall').click(function(){
+                    str="";
+                    $('.alldelete').prop("checked",false);
+                    $('.checklist label input').prop("checked",false);
+                })
+            })
+            $('#alla').click(function(){
+                if($(this).is(":checked")){
+                    $('.checkbox-inline input').prop("checked",true);
+                }else{
+                    $('.checkbox-inline input').prop("checked",false);
+                }
+            })
+            $('#allas').click(function(){
+                if($(this).is(":checked")){
+                    $('.checkbox-inline input').prop("checked",true);
+                }else{
+                    $('.checkbox-inline input').prop("checked",false);
+                }
+            })
+            $('.submit-group').click(function(){
+                var groupName=$('#recipient-name').val();
+                var groupPower=[];
+                $('.checkgroup .col-md-12 .checkbox-inline input').each(function(index,item){
+                    if($(this).is(":checked")){
+                        groupPower.push($(this).attr("title"));
+                    }
+                })
+                groupPower= JSON.stringify(groupPower);
+                $.post("/addgroup",{groupname:groupName,grouppowers:groupPower},function(data,tip){
+                    if(tip=="success"){
+                        window.history.go(0);
+                    }
+                })
+            })
+        })
+        function deletegroup(id){
+            var id=id;
+            $("#gridSystemModalss").modal("show");
+            $('.deltes').click(function(){
+                $.get('/deletegroup',{id:id},function(data,tip){
+                    if(tip=="success"){
+                        if(data[0]['count(*)']%5==0){
+                            location.href="/usergroup?page="+data[0]['count(*)']/5;
+                            if(data[0]['count(*)']/5==0){
+                                location.href="/usergroup";
+                            }
+                        }else{
+                            window.history.go(0);
+                        }
+
+                    }
+                })
+            })
+        }
+        function updatagroup(id){
+            $.post('/updatagroup',{id:id},function(data,tip){
+                $.each(data,function(index,item){
+                    $('#recipient-names').val(item['groupname']);
+                    $('#recipient-tip').val(item['grouppower']);
+                    $('.recipient-hidd').val(item['id']);
+                    $('.checkgroups .col-md-12 .checkbox-inline input').each(function(index,items){
+                        if(item['grouptip'].indexOf($(this).attr("title") ) !=-1){
+                            $(this).prop("checked",true);
+                        }
+                    })
+                })
+            })
+            $('#exampleModalsss').modal('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <style>
+        .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"]{
+            margin-left:0;position:static;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="/home" class="list-group-item">首页</a>
+                <a href="/userss" class="list-group-item active">用户管理</a>
+                <a href="/usergroup" class="list-group-item">用户组管理</a>
+                <a href="/company" class="list-group-item">机构管理</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">用户管理面板</div>
+                <div class="panel-body">
+                    <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">添加用户</a>
+
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>用户组名</th>
+                        <th>用户组描述</th>
+                        <th>用户组权限</th>
+                        <th>机构操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <th scope="row"><div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="">
+                                </label>
+                            </div></th>
+                        <td>打狗棍法</td>
+                        <td>打狗棍法</td>
+                        <td>打狗棍法</td>
+                        <td><a href="javascript:void(0)" class="btn btn-danger" data-toggle="modal">修改</a>&nbsp;&nbsp;<a href="javascript:void(0)"  class="btn btn-danger" data-toggle="modal">删除</a></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    全选&nbsp;&nbsp;<input type="checkbox">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#" class="btn btn-danger">删除</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <nav aria-label="Page navigation" style="text-align:center;">
+                            <ul class="pagination pagination-lg">
+                                <li>
+                                    <a href="javascript:void(0)" aria-label="Previous" disabled="false">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="active"><a href="#">1</a></li>
+
+                                <li><a href="#">2</a></li>
+                                <li>
+                                    <a href="javascript:void(0);" aria-label="Next" disabled="false">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="/javascripts/jquery-1.9.1.min.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
+</body>
+</html>

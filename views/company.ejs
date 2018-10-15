@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>机构管理</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <style>
+        .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"]{
+            margin-left:0;position:static;
+        }
+    </style>
+</head>
+<body>
+<% include header.ejs %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="/home" class="list-group-item">首页</a>
+                <a href="/userss" class="list-group-item">用户管理</a>
+                <a href="/usergroup" class="list-group-item">用户组管理</a>
+                <a href="/company" class="list-group-item active">
+                    <span class="badge"><%= comlist[0]['count']%></span>
+                    机构管理
+
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">机构管理面板</div>
+                <div class="panel-body">
+                    <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">添加机构</a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>机构名称</th>
+                        <th>机构编号</th>
+                        <th>备注信息</th>
+                        <th>机构操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var i=0;i<comlist.length;i++){%>
+                    <tr>
+                        <th scope="row"><div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="<%= comlist[i]["id"]%>">
+                                </label>
+                            </div></th>
+                        <td><%= comlist[i]["names"]%></td>
+                        <td><%= comlist[i]["bianhao"]%></td>
+                        <td><%= comlist[i]["cons"]%></td>
+                        <td><a href="javascript:void(0)" onclick="updates(<%= comlist[i]['id']%>)" class="btn btn-danger" data-toggle="modal">修改</a>&nbsp;&nbsp;<a href="javascript:void(0)" onclick="delet(<%= comlist[i]['id']%>)" class="btn btn-danger" data-toggle="modal">删除</a></td>
+                    </tr>
+                    <% }%>
+                    </tbody>
+                </table>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                   全选&nbsp;&nbsp;<input type="checkbox">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#" class="btn btn-danger">删除</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <nav aria-label="Page navigation" style="text-align:center;">
+                            <ul class="pagination pagination-lg">
+
+                                <% if(pagenum==1){%>
+                                    <li>
+                                        <a href="javascript:void(0)" aria-label="Previous" disabled="false">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                <%}else{%>
+                                    <li>
+                                        <a href="/company?page=<%= pagenum-1%>" aria-label="Previous" disabled="true">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                <%}%>
+
+
+                                <% for(var i=1;i<=Math.ceil(comlist[0]['count']/5);i++){ %>
+
+                                <%if(i==pagenum){%>
+                                    <li class="active"><a href="/company?page=<%= i%>"><%= i %></a></li>
+                                <%}else{%>
+                                    <li><a href="/company?page=<%= i%>"><%= i%></a></li>
+
+
+                                <% }%>
+
+
+                                <% }%>
+
+                                <%if(pagenum==Math.ceil(comlist[0]['count']/5)){%>
+                                    <li>
+                                        <a href="javascript:void(0);" aria-label="Next" disabled="false">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                <%}else{%>
+                                    <li>
+                                        <a href="/company?page=<%= parseInt(pagenum)+1%>" aria-label="Next" disabled="true">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                <%}%>
+
+
+                            </ul>
+                        </nav>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="1" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">机构添加</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/addComp">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">机构名称:</label>
+                        <input type="text" name="names" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">机构编号:</label>
+                        <input type="text" name="bianhao" class="form-control" id="recipient-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">备注:</label>
+                        <textarea class="form-control" name="cons" rows="3" style="overflow:hidden;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="gridSystemModals">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">重要提示</h4>
+            </div>
+            <div class="modal-body">
+                确认要删除吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary deltes">delete</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="exampleModals" tabindex="1" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">机构修改</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/updataComp">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">机构名称:</label>
+                        <input type="text" name="names" class="form-control namesss" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">机构编号:</label>
+                        <input type="text" name="bianhao" class="form-control bianhaoss" id="recipient-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">备注:</label>
+                        <textarea class="form-control conss" name="cons" rows="3" style="overflow:hidden;"></textarea>
+                    </div>
+                    <input type="hidden" name="id" class="idss">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="/javascripts/jquery-1.9.1.min.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
+    <script>
+        function delet(num){
+            $('#gridSystemModals').modal("show");
+            $('.deltes').click(function(){
+                $.post("/deltecompan",{id:num},function(data){
+                    if(data=="success"){
+                        window.history.go(0);
+                    }
+                })
+            })
+        }
+        function updates(num){
+            $('#exampleModals').modal("show");
+            $.post("/updatt",{id:num},function(data,tip){
+                $('.idss').val(data[0]['id']);
+                $('.namesss').val(data[0]['names']);
+                $('.bianhaoss').val(data[0]['bianhao']);
+                $('.conss').val(data[0]['cons']);
+            })
+        }
+    </script>
+</body>
+</html>
